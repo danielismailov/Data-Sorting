@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Algorithm Visualizer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Sorting Algorithm Visualizer</h1>
+    <div id="app">
+        <input type="text" id="dataset" placeholder="Enter numbers separated by commas">
+        <select id="algorithm">
+            <option value="bubble">Bubble Sort</option>
+            <option value="quick">Quick Sort</option>
+            <option value="merge">Merge Sort</option>
+        </select>
+        <button onclick="sortData()">Sort</button>
+        <div id="output"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

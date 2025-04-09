@@ -1,3 +1,23 @@
+const dataset = document.getElementById('dataset').value.split(',').map(Number);
+const canvas = document.getElementById("myCanvas");
+const ctx = canvas.getContext("2d");
+
+// function addDataToGraph(){
+//     const dataset = document.getElementById('dataset').value.split(',').map(Number);
+//     ctx.clearRect(0, 0, 500, 200)
+//     ctx.fillStyle = "red";
+//     for(let i = 0; i < dataset.length; i++){
+//         ctx.fillRect(20*i, 0, 10, dataset[i]*10);  
+//     }
+
+// }
+
+// function resizeCanvas(){
+//     const dataset = document.getElementById('dataset').value.split(',').map(Number);
+//     const dataSize = dataset.length;
+//     canvas.width = 20*dataSize;
+// }
+
 function sortData() {
     const dataset = document.getElementById('dataset').value.split(',').map(Number);
     const algorithm = document.getElementById('algorithm').value;
@@ -12,6 +32,15 @@ function sortData() {
     }
  
     document.getElementById('output').innerText = `Sorted Data: ${sortedData}`;
+    
+    ctx.clearRect(0, 0, 500, 200)
+    const dataSize = dataset.length;
+    canvas.width = 20*dataSize+10;
+    canvas.height = 10*sortedData[sortedData.length-1]+10;
+    for(let i = 0; i < sortedData.length; i++){
+        ctx.fillRect(20*i+10, 0, 10, sortedData[i]*10);  
+    }
+
 }
 
 function bubbleSort(arr) {
@@ -47,9 +76,4 @@ function mergeSort(arr) {
     }
     return result.concat(left.slice(i)).concat(right.slice(j));
 }
-
-const canvas = document.getElementById("myCanvas");
-const ctx = canvas.getContext("2d");
-ctx.fillStyle = "red";
-ctx.fillRect(0, 0, 150, 75);
 

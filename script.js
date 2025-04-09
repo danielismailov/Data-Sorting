@@ -75,3 +75,24 @@ function mergeSort(arr) {
     return result.concat(left.slice(i)).concat(right.slice(j));
 }
 
+//add all and divide by number of elements
+function findMean(){
+
+}
+
+//remove elements from either end of the sorted set until one or two remain
+//if one remains thats the median, if two remail take the average of them and thets the median
+function findMedian(){
+
+}
+
+//largest value - smallest value
+function findRange(){
+
+}
+
+//for every value in the data set, find the distance from the mean and square it
+//sum all of these squares and divide by the size of the data set
+function findStdDev(){
+
+}

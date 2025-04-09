@@ -2,21 +2,18 @@ const dataset = document.getElementById('dataset').value.split(',').map(Number);
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 
-// function addDataToGraph(){
-//     const dataset = document.getElementById('dataset').value.split(',').map(Number);
-//     ctx.clearRect(0, 0, 500, 200)
-//     ctx.fillStyle = "red";
-//     for(let i = 0; i < dataset.length; i++){
-//         ctx.fillRect(20*i, 0, 10, dataset[i]*10);  
-//     }
 
-// }
+function randomElement(array){
+    const random = Math.floor(Math.random() * array.length);
+    return array[random];
+}
 
-// function resizeCanvas(){
-//     const dataset = document.getElementById('dataset').value.split(',').map(Number);
-//     const dataSize = dataset.length;
-//     canvas.width = 20*dataSize;
-// }
+function randColor(){
+    let list = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
+    let hex = String(randomElement(list))+String(randomElement(list))+String(randomElement(list))+String(randomElement(list))+String(randomElement(list))+String(randomElement(list));
+    let newColor = "#"+hex;
+    return newColor;
+}
 
 function sortData() {
     const dataset = document.getElementById('dataset').value.split(',').map(Number);
@@ -33,14 +30,15 @@ function sortData() {
  
     document.getElementById('output').innerText = `Sorted Data: ${sortedData}`;
     
+    ctx.fillStyle = randColor();
     ctx.clearRect(0, 0, 500, 200)
     const dataSize = dataset.length;
     canvas.width = 20*dataSize+10;
     canvas.height = 10*sortedData[sortedData.length-1]+10;
     for(let i = 0; i < sortedData.length; i++){
-        ctx.fillRect(20*i+10, 0, 10, sortedData[i]*10);  
+        ctx.fillStyle = randColor();
+        ctx.fillRect(20*i+10, canvas.height-sortedData[i]*10, 10, sortedData[i]*10);  
     }
-
 }
 
 function bubbleSort(arr) {

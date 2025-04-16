@@ -9,7 +9,9 @@
 <body>
     <h1>Sorting Algorithm Visualizer</h1>
     <div id="app">
-        <input type="text" id="dataset" placeholder="Enter numbers separated by commas">
+        
+        <input style="width: 250px;" type="text" id="dataset" placeholder="Enter numbers separated by commas">
+        
         <select id="algorithm">
             <option value="bubble">Bubble Sort</option>
             <option value="quick">Quick Sort</option>
@@ -21,6 +23,11 @@
 
     <canvas id="myCanvas" width="500" height="600" style="border:1px solid #000000; margin: 10px;"></canvas>
     <br>
+
+    <div id="median"></div>
+    <div id="mean"></div>
+    <div id="range"></div>
+    <div id="stdev"></div>
 
     <script src="script.js"></script>
 

@@ -27,9 +27,10 @@ function sortData() {
     } else if (algorithm === 'merge') {
         sortedData = quickSort(dataset);
     }
- 
-    document.getElementById('output').innerText = `Sorted Data: ${sortedData}`;
     
+
+    document.getElementById('output').innerText = `Sorted Data: ${sortedData}`;
+
     ctx.fillStyle = randColor();
     ctx.clearRect(0, 0, 500, 200)
     const dataSize = dataset.length;
@@ -39,6 +40,12 @@ function sortData() {
         ctx.fillStyle = randColor();
         ctx.fillRect(20*i+10, canvas.height-sortedData[i]*10, 10, sortedData[i]*10);  
     }
+
+    document.getElementById('range').innerText = `Range: ${findRange(sortedData)}`;
+    document.getElementById('mean').innerText = `Mean: ${findMean(sortedData)}`;
+    document.getElementById('median').innerText = `Median: ${findMedian(sortedData)}`;
+    document.getElementById('stdev').innerText = `Standard Deviation: ${findStdDev(sortedData)}`;
+
 }
 
 function bubbleSort(arr) {
@@ -75,24 +82,56 @@ function mergeSort(arr) {
     return result.concat(left.slice(i)).concat(right.slice(j));
 }
 
-//add all and divide by number of elements
-function findMean(){
-
+// add all and divide by number of elements
+// array doesn't have to be sorted 
+function findMean(arr){
+    let sum = 0;
+    for(i = 0; i < arr.length; i++){
+        sum += arr[i];
+    }
+    let mean = sum/arr.length;
+    return mean.toFixed(3);
 }
 
-//remove elements from either end of the sorted set until one or two remain
-//if one remains thats the median, if two remail take the average of them and thets the median
-function findMedian(){
+// remove elements from either end of the sorted set until one or two remain
+// if one remains thats the median, if two remail take the average of them and thets the median
+// array must be sorted for this to work
+function findMedian(arr){
+    let median;
+    let tempArr = [...arr];
+    while (tempArr.length  >= 3){
+        tempArr.pop();
+        tempArr.shift();
+    }
 
+    if (tempArr.length == 2){
+        median = (tempArr[0]+tempArr[1])/2;
+        
+    } else if (tempArr.length == 1){
+        median = tempArr[0];
+    }
+
+    return median;
 }
 
-//largest value - smallest value
-function findRange(){
-
+// largest value - smallest value
+// array must be sorted for this to work
+function findRange(arr){
+    let range;
+    range = arr[arr.length-1]-arr[0];
+    return range;
 }
 
-//for every value in the data set, find the distance from the mean and square it
-//sum all of these squares and divide by the size of the data set
-function findStdDev(){
+// for every value in the data set, find the distance from the mean and square it
+// sum all of these squares and divide by the size of the data set
+function findStdDev(arr){
+    let mean = findMean(arr);
+    let sum = 0;
+    for (let i = 0; i < arr.length; i++){
+        sum += (arr[i]-mean) ** 2;
+    }
 
+    let variance = sum/(arr.length-1);
+    let stdDev = Math.sqrt(variance);
+    return stdDev.toFixed(3);
 }

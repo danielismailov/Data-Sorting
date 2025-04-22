@@ -11,13 +11,16 @@
     <div id="app">
         
         <input style="width: 250px;" type="text" id="dataset" placeholder="Enter numbers separated by commas">
-        
-        <select id="algorithm">
+        <button onclick="addToData()" id="submit">Submit</button>  
+        <button onclick="data = []" id="reset">Reset</button>  
+        <br>
+        <select style="margin-top: 10px;" id="algorithm">
             <option value="bubble">Bubble Sort</option>
             <option value="quick">Quick Sort</option>
             <option value="merge">Merge Sort</option>
         </select>
-        <button onclick="sortData()">Sort</button>
+        <br>
+        <button style="margin-top: 10px; background-color: greenyellow; width: 75px; height: 25px; font-size: large;" onclick="sortData()">Sort</button>
         <div id="output"></div>
     </div>
 

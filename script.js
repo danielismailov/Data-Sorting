@@ -36,7 +36,11 @@ function addToData(){
 function reset(){
     data = [];
     input.value = "";
-    document.getElementById('output').innerText = `Raw Data: ${data}`;
+    document.getElementById('output').innerText = "Raw Data: ";
+    document.getElementById('range').innerText = "Range: "
+    document.getElementById('mean').innerText = "Mean: "
+    document.getElementById('median').innerText = "Median: "
+    document.getElementById('stdev').innerText = "Standard Deviation: "
 
 }
 
@@ -52,24 +56,24 @@ function sortData() {
     } else if (algorithm === 'merge') {
         sortedData = mergeSort(dataset);
     }
-    
 
     document.getElementById('output').innerText = `Sorted Data: ${sortedData}`;
 
     ctx.fillStyle = randColor();
-    ctx.clearRect(0, 0, 500, 200)
+    ctx.clearRect(0, 0, 500, 300)
     const dataSize = dataset.length;
     canvas.width = 20*dataSize+10;
-    canvas.height = 10*sortedData[sortedData.length-1]+10;
+
+    let scale = sortedData[sortedData.length-1]*10/(canvas.height-10);
     for(let i = 0; i < sortedData.length; i++){
         ctx.fillStyle = randColor();
-        ctx.fillRect(20*i+10, canvas.height-sortedData[i]*10, 10, sortedData[i]*10);  
+        ctx.fillRect(20*i+10, canvas.height-sortedData[i]*10/scale, 10, sortedData[i]*10/scale);  
     }
 
-    document.getElementById('range').innerText = `Range: ${findRange(sortedData)}`;
-    document.getElementById('mean').innerText = `Mean: ${findMean(sortedData)}`;
-    document.getElementById('median').innerText = `Median: ${findMedian(sortedData)}`;
-    document.getElementById('stdev').innerText = `Standard Deviation: ${findStdDev(sortedData)}`;
+    document.getElementById('range').innerText = `Range: ${findRange(sortedData).toFixed(3)}`;
+    document.getElementById('mean').innerText = `Mean: ${findMean(sortedData).toFixed(3)}`;
+    document.getElementById('median').innerText = `Median: ${findMedian(sortedData).toFixed(3)}`;
+    document.getElementById('stdev').innerText = `Standard Deviation: ${findStdDev(sortedData).toFixed(3)}`;
 
 }
 
@@ -118,12 +122,13 @@ function mergeSort(arr) {
 // add all and divide by number of elements
 // array doesn't have to be sorted 
 function findMean(arr){
+    let mean;
     let sum = 0;
     for(i = 0; i < arr.length; i++){
         sum += arr[i];
     }
-    let mean = sum/arr.length;
-    return mean.toFixed(3);
+    mean = sum/arr.length;
+    return mean;
 }
 
 // remove elements from either end of the sorted set until one or two remain
@@ -158,6 +163,7 @@ function findRange(arr){
 // for every value in the data set, find the distance from the mean and square it
 // sum all of these squares and divide by the size of the data set
 function findStdDev(arr){
+    let stdDev;
     let mean = findMean(arr);
     let sum = 0;
     for (let i = 0; i < arr.length; i++){
@@ -165,6 +171,6 @@ function findStdDev(arr){
     }
 
     let variance = sum/(arr.length-1);
-    let stdDev = Math.sqrt(variance);
-    return stdDev.toFixed(3);
+    stdDev = Math.sqrt(variance);
+    return stdDev;
 }

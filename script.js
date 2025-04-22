@@ -33,6 +33,13 @@ function addToData(){
 
 }
 
+function reset(){
+    data = [];
+    input.value = "";
+    document.getElementById('output').innerText = `Raw Data: ${data}`;
+
+}
+
 function sortData() {
     let dataset = data;
     const algorithm = document.getElementById('algorithm').value;

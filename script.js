@@ -41,6 +41,10 @@ function reset(){
     document.getElementById('mean').innerText = "Mean: "
     document.getElementById('median').innerText = "Median: "
     document.getElementById('stdev').innerText = "Standard Deviation: "
+    canvas.width = 500;
+    canvas.height = 400;
+    ctx.clearRect(0, 0, 500, 400)
+
 
 }
 

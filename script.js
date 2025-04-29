@@ -1,9 +1,16 @@
 let data = [];
+let sortedData;
 const input = document.getElementById('dataset');
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 
 const submit = document.getElementById("submit");
+
+const animationSpeed = 50;
+
+function sleep(ms) { 
+    return new Promise(r => setTimeout(r, ms)); 
+}
 
 input.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
@@ -43,54 +50,68 @@ function reset(){
     document.getElementById('stdev').innerText = "Standard Deviation: "
     canvas.width = 500;
     canvas.height = 400;
-    ctx.clearRect(0, 0, 500, 400)
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
 
 
 }
 
+function drawData(arr) {
+    const dataSize = arr.length;
+    canvas.width = 20*dataSize+10;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const maxVal = Math.max(...arr, 1);
+    const scale = (canvas.height - 10) / (maxVal * 10);
+    arr.forEach((v,i) => {
+      ctx.fillStyle = randColor();
+      const height = v * 10 * scale;
+      ctx.fillRect(20*i+10, canvas.height - height, 10, height);
+    });
+  }
+
 function sortData() {
     let dataset = data;
     const algorithm = document.getElementById('algorithm').value;
-    let sortedData;
 
     if (algorithm === 'bubble') {
-        sortedData = bubbleSort(dataset);
+        bubbleSort(dataset);
     } else if (algorithm === 'quick') {
-        sortedData = quickSort(dataset);
+        quickSort(dataset);
     } else if (algorithm === 'merge') {
-        sortedData = mergeSort(dataset);
+        mergeSort(dataset);
     }
+
+
+    // ctx.fillStyle = randColor();
+    // ctx.clearRect(0, 0, canvas.width, canvas.height)
+    // const dataSize = dataset.length;
+    // canvas.width = 20*dataSize+10;
+
+    // let scale = sortedData[sortedData.length-1]*10/(canvas.height-10);
+    // for(let i = 0; i < sortedData.length; i++){
+    //     ctx.fillStyle = randColor();
+    //     ctx.fillRect(20*i+10, canvas.height-sortedData[i]*10/scale, 10, sortedData[i]*10/scale);  
+    // }
 
     document.getElementById('output').innerText = `Sorted Data: ${sortedData}`;
-
-    ctx.fillStyle = randColor();
-    ctx.clearRect(0, 0, 500, 300)
-    const dataSize = dataset.length;
-    canvas.width = 20*dataSize+10;
-
-    let scale = sortedData[sortedData.length-1]*10/(canvas.height-10);
-    for(let i = 0; i < sortedData.length; i++){
-        ctx.fillStyle = randColor();
-        ctx.fillRect(20*i+10, canvas.height-sortedData[i]*10/scale, 10, sortedData[i]*10/scale);  
-    }
-
     document.getElementById('range').innerText = `Range: ${findRange(sortedData).toFixed(3)}`;
     document.getElementById('mean').innerText = `Mean: ${findMean(sortedData).toFixed(3)}`;
     document.getElementById('median').innerText = `Median: ${findMedian(sortedData).toFixed(3)}`;
     document.getElementById('stdev').innerText = `Standard Deviation: ${findStdDev(sortedData).toFixed(3)}`;
 
-}
+} 
 
-function bubbleSort(arr) {
+async function bubbleSort(arr) {
     const data = [...arr];
     for (let i = 0; i < data.length; i++) {
         for (let j = 0; j < data.length - i - 1; j++) {
             if (data[j] > data[j + 1]) {
                 [data[j], data[j + 1]] = [data[j + 1], data[j]];
+                drawData(data);                      
+                await sleep(animationSpeed);       
             }
         }
     }
-    return data;
+    sortedData = data.slice(); 
 }
 
 function quickSort(arr) {

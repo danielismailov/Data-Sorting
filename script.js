@@ -1,12 +1,11 @@
 let data = [];
-let sortedData;
 const input = document.getElementById('dataset');
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 
 const submit = document.getElementById("submit");
 
-const animationSpeed = 50;
+const animationSpeed = 200;
 
 function sleep(ms) { 
     return new Promise(r => setTimeout(r, ms)); 
@@ -36,14 +35,14 @@ function addToData(){
     const newVal = input.value.split(',').map(Number);
     data = data.concat(newVal); 
     input.value = "";
-    document.getElementById('output').innerText = `Raw Data: ${data}`;
+    document.getElementById('data').innerText = `Raw Data: ${data}`;
 
 }
 
 function reset(){
     data = [];
     input.value = "";
-    document.getElementById('output').innerText = "Raw Data: ";
+    document.getElementById('data').innerText = "Raw Data: ";
     document.getElementById('range').innerText = "Range: "
     document.getElementById('mean').innerText = "Mean: "
     document.getElementById('median').innerText = "Median: "
@@ -51,7 +50,6 @@ function reset(){
     canvas.width = 500;
     canvas.height = 400;
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-
 
 }
 
@@ -62,13 +60,12 @@ function drawData(arr) {
     const maxVal = Math.max(...arr, 1);
     const scale = (canvas.height - 10) / (maxVal * 10);
     arr.forEach((v,i) => {
-      ctx.fillStyle = randColor();
       const height = v * 10 * scale;
       ctx.fillRect(20*i+10, canvas.height - height, 10, height);
     });
   }
 
-function sortData() {
+async function sortData() {
     let dataset = data;
     const algorithm = document.getElementById('algorithm').value;
 
@@ -80,7 +77,6 @@ function sortData() {
         mergeSort(dataset);
     }
 
-
     // ctx.fillStyle = randColor();
     // ctx.clearRect(0, 0, canvas.width, canvas.height)
     // const dataSize = dataset.length;
@@ -91,8 +87,9 @@ function sortData() {
     //     ctx.fillStyle = randColor();
     //     ctx.fillRect(20*i+10, canvas.height-sortedData[i]*10/scale, 10, sortedData[i]*10/scale);  
     // }
-
-    document.getElementById('output').innerText = `Sorted Data: ${sortedData}`;
+    
+    let sortedData = data.sort((a, b) => a - b);
+    document.getElementById('sorted').innerText = `Sorted Data: ${sortedData}`;
     document.getElementById('range').innerText = `Range: ${findRange(sortedData).toFixed(3)}`;
     document.getElementById('mean').innerText = `Mean: ${findMean(sortedData).toFixed(3)}`;
     document.getElementById('median').innerText = `Median: ${findMedian(sortedData).toFixed(3)}`;
@@ -101,36 +98,44 @@ function sortData() {
 } 
 
 async function bubbleSort(arr) {
-    const data = [...arr];
-    for (let i = 0; i < data.length; i++) {
-        for (let j = 0; j < data.length - i - 1; j++) {
-            if (data[j] > data[j + 1]) {
-                [data[j], data[j + 1]] = [data[j + 1], data[j]];
-                drawData(data);                      
-                await sleep(animationSpeed);       
+    const nums = [...arr];
+    for (let i = 0; i < nums.length; i++) {
+        for (let j = 0; j < nums.length - i - 1; j++) {
+            if (nums[j] > nums[j + 1]) {
+                [nums[j], nums[j + 1]] = [nums[j + 1], nums[j]];
+                drawData(nums);                      
+                await sleep(animationSpeed);   
             }
         }
     }
-    sortedData = data.slice(); 
 }
 
-function quickSort(arr) {
+
+//switch from recurssion to a for loop
+async function quickSort(arr) {
+    const nums = [...arr];
+    if (nums.length <= 1) drawData(nums);
+    const pivot = nums[nums.length - 1];
+    const left = nums.filter(el => el < pivot);
+    const equal = nums.filter(el => el === pivot);
+    const right = nums.filter(el => el > pivot);
+    
+    drawData(nums);                      
+    await sleep(animationSpeed);   
+
+    nums = [...quickSort(left), ...equal, ...quickSort(right)];
+}
+
+async function mergeSort(arr) {
     if (arr.length <= 1) return arr;
-    const pivot = arr[arr.length - 1];
-    const left = arr.filter(el => el < pivot);
-    const equal = arr.filter(el => el === pivot);
-    const right = arr.filter(el => el > pivot);
-    return [...quickSort(left), ...equal, ...quickSort(right)];
-}
-
-function mergeSort(arr) {
-     if (arr.length <= 1) return arr;
 
     const mid = Math.floor(arr.length / 2);
     const left = mergeSort(arr.slice(0, mid));
     const right = mergeSort(arr.slice(mid));
 
     const result = [];
+    
+    //switch to for loop to make animating easier
     let i = 0, j = 0;
 
     while (i < left.length && j < right.length) {
@@ -139,9 +144,8 @@ function mergeSort(arr) {
         } else {
             result.push(right[j++]);
         }
-    }
 
-    return result.concat(left.slice(i)).concat(right.slice(j));
+    }
 }
 
 // add all and divide by number of elements
